@@ -1,0 +1,50 @@
+// sc : scala context
+// scala : scala session
+// Copia NotreDame.txt y boston_data.csv al directorio actual
+
+
+val lines = sc.textFile("./NotreDame.txt")
+val words = lines.flatMap(x => x.split("\\W+")).map(x => x.toLowerCase())
+val wordsWithCounter = words.map(x => (x, 1))
+val wordsCounts = wordsWithCounter.reduceByKey((x,y) => (x+y))
+val wordsCountsReversed = wordsCounts.map(x => (x._2, x._1))
+val hundredWords = wordsCountsReversed.sortByKey(false).take(100)
+for (w <- hundredWords) {
+	var word = w._2
+	if(word.length < 3) {
+		word = word + "     "
+	}
+	println("Word: " + word + "\tCount: " + w._1)
+}
+
+
+//----------------------------------------------------------------------------------------
+
+
+int double int double int double double doutble double int int double double double double
+case class HousingPrice(ID:Int, crim:Double, zn: Double, indus: Double, chas: Double,
+	nox:Double, rm: Double, age: Double, dis: Double, rad: Double, tax: Double,
+	ptratio: Double, black: Double, lstat: Double, medv: Double)
+
+def ParseHousingPrice(line: String) : HousingPrice = {
+	val fields = line.split(",")
+	return HousingPrice(fields(0).toInt, fields(1).toDouble,
+		fields(2).toDouble, fields(3).toDouble, fields(4).toDouble,
+		fields(5).toDouble, fields(6).toDouble, fields(7).toDouble,
+		fields(8).toDouble, fields(9).toDouble, fields(10).toDouble,
+		fields(11).toDouble, fields(12).toDouble, fields(13).toDouble,
+		fields(14).toDouble)
+}
+
+val allRows = sc.textFile("./boston_data.csv")
+val header = allRows.first
+val rows = allRows.filter(x => x!=header).map(x => ParseHousingPrice(x))
+val expensiveHousesRooms = rows.filter(x => x.medv > 25.0).map(x => x.rm)
+val averageBedroomsInExpensiveHouses = expensiveHousesRooms.sum / expensiveHousesRooms.count
+println("Número medio de dormitorios en casas de valor superior a 25000$: ", averageBedroomsInExpensiveHouses)
+val cheapHouses = rows.filter(x => x.medv <= 25.0).toDS()
+cheapHouses.createTempView("houses")
+val result = spark.sql("select avg(age) from houses").collect
+val average = result(0)(0)
+println("Edad promedio de los habitantes de las casas baratas: ", average)
+

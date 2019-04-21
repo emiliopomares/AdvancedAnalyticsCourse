@@ -1,0 +1,29 @@
+ID id (Int) Can be missing
+
+crim per capita crime rate by town. (Double)
+
+zn proportion of residential land zoned for lots over 25,000 sq.ft. (Double)
+
+indus proportion of non-retail business acres per town. (Double)
+
+chas Charles River dummy variable (= 1 if tract bounds river; 0 otherwise). (Int)
+
+nox nitrogen oxides concentration (parts per 10 million). (Double)
+
+rm average number of rooms per dwelling. (Double)
+
+age proportion of owner-occupied units built prior to 1940. (Double)
+
+dis weighted mean of distances to five Boston employment centres. (Double)
+
+rad index of accessibility to radial highways. (Double)
+
+tax full-value property-tax rate per $10,000. (Double)
+
+ptratio pupil-teacher ratio by town. (Double)
+
+black 1000(Bk - 0.63)^2 where Bk is the proportion of blacks by town. (Double)
+
+lstat lower status of the population (percent). (Double)
+
+medv median value of owner-occupied homes in $1000s. (Double)
