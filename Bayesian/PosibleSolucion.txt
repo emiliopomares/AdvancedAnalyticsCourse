@@ -1,0 +1,64 @@
+
+# Número de gente que compró queso
+
+observedResult <- 8
+
+# genModel devuelve el número de gente de un grupo de N que compra queso, 
+# siendo la probabilidad de individual de compra prob
+
+genModel <- function(prob, N=20) {
+	total = 0
+	for (i in 1:N) {
+		r = runif(1, 0, 1)
+		if(r<prob) {
+			total <- total + 1
+		}
+	}
+	return(total)
+}
+
+
+# Muchos samples...
+
+NSamples <- 1000000
+
+
+# a priori totalmente desinformado,
+# no tenemos ni idea de cuál puede
+# ser esta probabilidad
+
+prior <- runif(NSamples, 0, 1)
+
+
+# Mostramos la distribución a priori
+
+hist(prior, col = "red")
+
+
+# Un número grande de veces, sampleamos
+# de nuestra distr. a priori, y usamos
+# nuestro modelo generativo con esta
+# probabilidad: aplicamos el filtro
+# de la evidencia
+
+post <- c()
+for (i in 1:NSamples) {
+	p = sample(prior, 1)
+	result <- genModel(p)
+	if(result == observedResult) {
+		post <- c(post, p)
+	}
+}
+
+
+# Visualicemos la distribución a posteriori
+
+hist(post, col = "blue")
+
+# Maximum a posteriori likelihood (max(post))
+# sería el valor que ocurre con más frecuencia
+# (approx 0.4, que sería el valor "duro")
+
+
+
+
